@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Pinwheel</title>
+<style type="text/css">
+	html, body { height: 100%; margin: 0; padding: 0; }
+
+	body {
+		background-color: #333;
+        font-family: Futura;
+	}
+    
+    h2 {
+        background-color: #fff;
+        float: left;
+        margin: 5em 0 0 5em;
+        -moz-border-radius: 15px;
+        padding: .5em;
+        position: relative;
+        -webkit-border-radius: 15px;
+        z-index: 2;
+    }
+
+    h2 a {
+        color: #333 !important;
+        cursor: pointer;
+        display: block;
+        outline: none;
+        text-decoration: none;
+    }
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    ul li {
+        margin: 0;
+        opacity: 0;
+        padding: 0;
+        position: absolute; /* pinwheel req? */
+    }
+
+</style>
+</head>
+
+<body>
+
+<h2 class="set1"><a href="">Explore</a></h2>
+
+<ul id="set1">
+    <li><img src="images/apple.png" /></li>
+    <li><img src="images/google.png" /></li>
+    <li><img src="images/flickr.png" /></li>
+    <li><img src="images/lastfm.png" /></li>
+    <li><img src="images/skype.png" /></li>
+    <li><img src="images/twitter.png" /></li>
+    <li><img src="images/wordpress.png" /></li>
+    <li><img src="images/technorati.png" /></li>
+    <li><img src="images/squidoo.png" /></li>
+    <li><img src="images/paypal.png" /></li>
+    <li><img src="images/meetup.png" /></li>
+</ul>
+
+<h2 class="set2"><a href="">the Web</a></h2>
+
+<ul id="set2">
+    <li><img src="images/apple.png" /></li>
+    <li><img src="images/google.png" /></li>
+    <li><img src="images/flickr.png" /></li>
+    <li><img src="images/lastfm.png" /></li>
+    <li><img src="images/skype.png" /></li>
+    <li><img src="images/twitter.png" /></li>
+    <li><img src="images/wordpress.png" /></li>
+    <li><img src="images/technorati.png" /></li>
+    <li><img src="images/squidoo.png" /></li>
+    <li><img src="images/paypal.png" /></li>
+    <li><img src="images/meetup.png" /></li>
+</ul>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://dev.nateeagle.com/scripts/src/NAE-js.js"></script>
+<script type="text/javascript" src="lib/jquery.path.js"></script>
+<script type="text/javascript" src="lib/jquery.easing.1.3.js"></script>
+<script type="text/javascript" src="src/jquery.pinwheel.path.js"></script>
+
+<script type="text/javascript">
+
+(function($){
+
+    $(document).ready(function() {
+
+        var set1 = $('#set1'),
+            set2 = $('#set2');
+
+        set1.pinwheel({ 
+            petals: 'li',
+            pinTo: 'h2.set1',
+            radius: 100
+        });
+
+        set2.pinwheel({
+            petals: 'li',
+            pinTo: 'h2.set2',
+            radius: 100
+        });
+
+        var wheel1 = set1.data('pinwheel'),
+            wheel2 = set2.data('pinwheel')
+
+        $('h2.set1').click(function() {
+            if (wheel1.state.open == false) {
+                wheel1.open();
+            } else {
+                wheel1.close(-1);
+            }
+            return false;
+        });
+
+        $('h2.set2').click(function() {
+            if (wheel2.state.open == false) {
+                wheel2.open();
+            } else {
+                wheel2.close(-1);
+            }
+            return false;
+        });
+
+        set1.children().click(function() {
+            console.log('click 1');
+            wheel1.spin(180);
+        });
+
+        set2.children().click(function() {
+            console.log('click 2');
+            wheel2.spin(180, -1);
+        });
+
+    });
+
+})(jQuery);
+
+</script>
+
+</body>
+</html>

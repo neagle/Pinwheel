@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Pinwheel</title>
+<style type="text/css">
+	html, body { margin: 0; padding: 0; }
+
+	body {
+		background-color: #333;
+        font-family: Futura;
+		text-align: center;
+	}
+
+    body > section {
+        background-color: #fff;
+        cursor: pointer;
+        display: table;
+        height: 50px;
+        -moz-border-radius: 15px;
+        -webkit-border-radius: 15px;
+        overflow: hidden;
+        padding: 25px;
+        position: fixed;
+        text-align: left;
+        width: 50px;
+
+        /* Box Shadow */
+        -moz-box-shadow: 0px 0px 10px #666; /* FF3.5+ */
+        -webkit-box-shadow: 0px 0px 10px #666; /* Saf3.0+, Chrome */
+    }
+
+    body > section h2 {
+        display: table-cell;
+        margin: 0;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    body > section p {
+        display: none;
+    }
+</style>
+</head>
+
+<body>
+
+<section>
+    <h2>Spin</h2>
+</section>
+
+<section>
+    <h2>Open</h2>
+</section>
+
+<section>
+    <h2>Close</h2>
+</section>
+
+<section>
+    <h2>Switch</h2>
+</section>
+
+<section>
+    <h2>Hop</h2>
+</section>
+
+<section>
+    <h2>Bounce</h2>
+</section>
+
+<section>
+    <h2>Section 7</h2>
+</section>
+
+<section>
+    <h2>Open</h2>
+</section>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://dev.nateeagle.com/scripts/src/NAE-js.js"></script>
+<script type="text/javascript" src="lib/jquery.path.js"></script>
+<script type="text/javascript" src="lib/jquery.easing.1.3.js"></script>
+<script type="text/javascript" src="src/jquery.pinwheel.path.js"></script>
+
+<script type="text/javascript">
+
+(function($){
+
+    $(document).ready(function() {
+
+        $('body').pinwheel({
+            open: true,
+            origin: [$(window).width() / 2, $(window).height() / 2],
+            petals: 'section',
+            radius: $(window).height() / 3,
+            transparentClosed: false
+        });
+
+        var wheel = $('body').data('pinwheel');
+
+        $('h2:contains("Open")').parent().click(function() {
+            wheel.open();
+        });
+
+        $('h2:contains("Close")').parent().click(function() {
+            wheel.close();
+        });
+
+        $('h2:contains("Spin")').parent().click(function() {
+            wheel.spin(360);
+        });
+
+    });
+
+})(jQuery);
+
+</script>
+
+<!--
+// Only render text for visible items?
+// Blank out text for moving items
+-->
+
+</body>
+</html>

@@ -1,4 +1,3 @@
-var NAE = NAE || {};
 (function($){
 
 $(document).ready(function() {
@@ -35,18 +34,16 @@ var Pinwheel = {
     },
     options: {
         home: 270,
-        origin: [$(window).width() / 2, -1 * ($(window).height() / 2)],
+        origin: [$(window).width() / 2, 0],
         petals: null,
-        radius: $(window).height(),
+        radius: $(window).height() / 2,
         rotation: 0
     },
     _build: function() {
-        //console.log(this.options.origin, this.options.radius);
         this.petals = this.$elem.children(this.options.petals);
-        // console.log(this.petals);
 
+        // Toss in a method for converting degrees to radians
         if (!Number.prototype.deg2rad) {
-            //console.log('creating deg2rad');
             Number.prototype.deg2rad = function() {
                 return this * (Math.PI/180);
             }
@@ -56,10 +53,6 @@ var Pinwheel = {
     },
     _deploy: function() {
         var that = this;
-        if (this.$elem.css('pinwheel') == '') {
-            this.$elem.css({ 'pinwheel' : this.options.rotation });
-        }
-        var rot = parseInt(this.$elem.css('pinwheel'));
 
         this.petals.each(function(i, item) {
             item = $(item);
@@ -67,18 +60,13 @@ var Pinwheel = {
 
             c = that.options.radius;
 
-            deg = i * (360 / that.petals.length) + rot + that.options.home;
+            deg = i * (360 / that.petals.length) + that.options.rotation + that.options.home;
             deg = deg % 360;
 
             alpha = 1 - Math.abs(180 - ((deg + that.options.home) % 360)) * (1/180);
-            // alpha = Math.abs(180 - (deg - that.options.home)) * (1 / 180);
-
-            if (i == 2) {
-                //console.log(Math.abs(180 - ((deg + that.options.home) % 360)));
-            }
-            // console.log(alpha);
 
             theta = deg % 90;
+
             // One angle is 90°, we know theta, and the sides of a triangle add up to 180°
             phi = 90 - theta; 
 
@@ -86,39 +74,38 @@ var Pinwheel = {
             a = c * Math.sin(theta);
             b = c * Math.cos(theta);
 
-            // console.log('Θ:', theta, 'Φ:', phi, 'a:', a, 'b:', b, 'radius:', c);
-            // console.log('Degrees:', deg);
-            // console.log('Theta:', theta);
+            // Transform values according to quadrant
 
+            // Quadrant 1
             if (deg < 90) {
-                // console.log('Quad: 1');
                 a = a * -1;
                 x = b;
                 y = a;
             }
 
+            // Quadrant 2
             if (deg < 180 && deg >= 90) {
-                // console.log('Quad: 2');
                 a = a * -1;
                 b = b * -1;
                 x = a;
                 y = b;
             }
 
+            // Quadrant 3
             if (deg < 270 && deg >= 180) {
-                // console.log('Quad: 3');
                 b = b * -1;
                 x = b;
                 y = a;
             }
 
+            // Quadrant 4
             if (deg < 360 && deg >= 270) {
-                // console.log('Quad: 4');
                 x = a;
                 y = b;
             }
 
 
+            // Define x and y in reference to the origin point
             x = that.options.origin[0] + x;
             y = that.options.origin[1] + y;
 
@@ -127,56 +114,30 @@ var Pinwheel = {
             y = y - item.height() / 2;
 
 
-            // Set the z-index
+            // Set the z-index so that the home petal is always on top
             z = alpha * 100;
             z = Math.round(z);
 
-            item.css({
+            item.stop().animate({
                 left: x, 
                 opacity: alpha,
-                top: y,
+                top: y
+            }, 'fast');
+            item.css({
                 'z-index' : z
             });
         });
     },
     // Spin either counterclockwise (default) or clockwise
     spin: function(direction) {
-        // console.log('spin');
         var direction = direction || 1;
         this.options.rotation += direction;
         this._deploy();
     },
-    // Spin to a given rotation
-    spinTo: function(destination) {
-        var that = this;
-        // this.$elem.rotation = 0;
-        this.$elem.css({
-            'pinwheel': 0
-        });
-        console.log('Rotation:',this.$elem.css('pinwheel'));
 
-        console.log('Spin to...');
-        this.$elem.animate({
-            pinwheel: destination 
-        }, {
-            duration: 'slow',
-            step: function() {
-                console.log('step');
-                console.log(that.$elem.css('pinwheel'));
-                that._deploy();
-            }
-        });
-        /*
-        console.log(typeof(destination));
-        // Spin to a specified degree 
-        if(typeof(destination) == 'number') {
-            this.options.rotation = destination || 0;
-            this._deploy();
-        }
-        // Spin to a given selector
-        if(typeof(destination) == 'string') {
-        }
-        */
+    spinTo: function(destination) {
+        this.options.rotation = destination;
+        this._deploy();
     }
 }
 
